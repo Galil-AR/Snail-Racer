@@ -53,7 +53,28 @@ func _process(delta):
 		PI/200)
 	if ($RightRay.is_colliding()):
 		rotate(-getSpeedFromPoint($RightRay.get_collision_point()))
-	
 	move_and_slide(-velocity.rotated(rotation))
-	
 	return
+	
+# Track TilesSet Camera
+extends Node2D
+
+func _ready():
+	set_camera_limits()
+	
+func set_camera_limits():
+	var map_limits = $Floor.get_used_rect()
+	var map_cellSize = $Floor.cell_size
+	$SnailPlayer/Camera2D.limit_bottom = map_limits.end.y * map_cellSize.y 
+	$SnailPlayer/Camera2D.limit_top = map_limits.position.y * map_cellSize.y
+	$SnailPlayer/Camera2D.limit_right = map_limits.end.x * map_cellSize.x
+	$SnailPlayer/Camera2D.limit_left = map_limits.position.x * map_cellSize.x
+
+# Title Menu
+extends Control
+
+func _on_StartGameButton_pressed():
+	get_tree().change_scene("res://circuits/Track.tscn")
+
+func _on_QuitGameButton_pressed():
+	get_tree().quit()
