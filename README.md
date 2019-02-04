@@ -34,12 +34,26 @@ func _ready():
 # NPC Snail code
 extends KinematicBody2D
 
-export (float) var _speed
-export (float) var rot_speed
+export (float) var speed
+export (float) var sensitivity
 
-var velocity = Vector2()
-onready var parent = get_parent()
+onready var velocity = Vector2(0, speed)
+
+func _ready():
+	return
+	
+func getSpeedFromPoint(point):
+	var dirVector = point - position
+	return (dirVector.length() * sensitivity) / dirVector.dot(
+	dirVector)
 
 func _process(delta):
-	if parent is PathFollow2D:
-		parent.set_offset(parent.get_offset() + _speed * delta)
+	if ($LeftRay.is_colliding()):
+		rotate(getSpeedFromPoint($LeftRay.get_collision_point()) + 
+		PI/200)
+	if ($RightRay.is_colliding()):
+		rotate(-getSpeedFromPoint($RightRay.get_collision_point()))
+	
+	move_and_slide(-velocity.rotated(rotation))
+	
+	return
