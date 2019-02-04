@@ -7,9 +7,11 @@ export (float) var max_speed
 export (float) var rotation_speed
 var velocity = Vector2()
 
+
 func _physics_process(delta):
 	control(delta)
 	move_and_slide(velocity)  
+	
 	
 func control(delta):
 	var rot_dir = 0
