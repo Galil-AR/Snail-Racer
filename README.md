@@ -12,7 +12,6 @@ func _physics_process(delta):
 	control(delta)
 	move_and_slide(velocity)  
 	
-	
 func control(delta):
 	var rot_dir = 0
 	if Input.is_action_pressed('turn_right'):
@@ -20,18 +19,17 @@ func control(delta):
 	if Input.is_action_pressed('turn_left'):
 		rot_dir -= 1
 	rotation = rotation + rotation_speed * rot_dir * delta
-	velocity = Vector2() #remove to add drift effect
+	if drift == false:
+		velocity = 0
 	if Input.is_action_pressed('forward'):
 		velocity = Vector2(max_speed, 2).rotated(rotation)
 	if Input.is_action_pressed('back'):
-		velocity = Vector2(-max_speed/2, 20).rotated(rotation)
-	if Input.is_action_pressed('boost'): 
+		velocity = Vector2(-max_speed/2, 2).rotated(rotation)
+	if Input.is_action_pressed('boost'):
 		max_speed = 400
+		velocity != Vector2()
 	else:
 		max_speed = 250
-	
-func _ready():
-	pass
 
 # NPC Snail code
 extends KinematicBody2D
